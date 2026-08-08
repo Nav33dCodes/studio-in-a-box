@@ -1,0 +1,15 @@
+# Node
+node_modules/
+dist/
+build/
+.env
+
+# .NET
+bin/
+obj/
+*.user
+appsettings.Development.json
+
+# OS
+.DS_Store
+Thumbs.db
