@@ -1,10 +1,10 @@
 import { useEffect, useState, useMemo } from 'react';
-import { 
-  useReactTable, 
-  getCoreRowModel, 
-  getSortedRowModel, 
-  flexRender, 
-  SortingState 
+import {
+  useReactTable,
+  getCoreRowModel,
+  getSortedRowModel,
+  flexRender,
+  SortingState
 } from '@tanstack/react-table';
 
 interface Movie {
@@ -80,7 +80,7 @@ export default function DataExplorer() {
     <div className="widget" style={{ gridColumn: '1 / -1', marginTop: 12 }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
         <h3 className="widget-title" style={{ margin: 0 }}>Enterprise Data Grid</h3>
-        
+
         <div className="controls-row" style={{ margin: 0 }}>
           <select className="select-control" value={genre} onChange={e => setGenre(e.target.value)}>
             <option value="Sci-Fi">Sci-Fi</option>
@@ -113,8 +113,8 @@ export default function DataExplorer() {
               {table.getHeaderGroups().map(headerGroup => (
                 <tr key={headerGroup.id}>
                   {headerGroup.headers.map(header => (
-                    <th 
-                      key={header.id} 
+                    <th
+                      key={header.id}
                       onClick={header.column.getToggleSortingHandler()}
                       style={{ cursor: 'pointer', userSelect: 'none' }}
                     >
