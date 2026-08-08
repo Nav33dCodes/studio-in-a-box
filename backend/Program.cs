@@ -16,10 +16,15 @@ builder.Services.AddHttpClient("AgentService", client => {
 // Register ClickHouse analytics service
 builder.Services.AddScoped<backend.Services.IMovieAnalyticsService, backend.Infrastructure.ClickHouse.ClickHouseAnalyticsService>();
 
+// Register SignalR and Background Simulator
+builder.Services.AddSignalR();
+builder.Services.AddHostedService<backend.Services.LiveBoxOfficeSimulator>();
+
 var app = builder.Build();
 
 app.UseCors();
 app.UseAuthorization();
 app.MapControllers();
+app.MapHub<backend.Hubs.BoxOfficeHub>("/boxofficehub");
 
 app.Run();
