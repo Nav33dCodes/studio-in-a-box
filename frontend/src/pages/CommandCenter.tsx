@@ -13,7 +13,8 @@ import { useState } from 'react';
 
 export default function CommandCenter() {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-  const [report, setReport] = useState<any>(null);
+  const [report, setReport] = useState<string | null>(null);
+  const [agentStatus, setAgentStatus] = useState<'idle' | 'analyzing' | 'complete'>('idle');
 
   // Fetch real data from ASP.NET Core API via TanStack Query
   const { data, isLoading, isError } = useQuery({
@@ -26,7 +27,17 @@ export default function CommandCenter() {
       
       {/* 1. Director Agent Hero Panel */}
       <section className="mb-8">
-        <DirectorHero onAnalysisComplete={(rep) => setReport(rep)} onOpenTrace={() => setIsDrawerOpen(true)} />
+        <DirectorHero 
+          onAnalysisStart={() => {
+            setAgentStatus('analyzing');
+            setReport(null);
+          }}
+          onAnalysisComplete={(rep) => {
+            setAgentStatus('complete');
+            setReport(rep);
+          }} 
+          onOpenTrace={() => setIsDrawerOpen(true)} 
+        />
       </section>
 
       {/* Main Grid Layout for the command center */}
@@ -47,7 +58,7 @@ export default function CommandCenter() {
         {/* Right Column: System & Agent (Takes up 4/12 space) */}
         <div className="col-span-12 xl:col-span-4 flex flex-col gap-6">
           {/* 4. Live Agent Activity */}
-          <LiveAgentActivity />
+          <LiveAgentActivity status={agentStatus} />
           
           {/* 5. System Status */}
           <SystemStatus />

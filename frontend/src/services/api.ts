@@ -23,21 +23,24 @@ export const api = {
     return json.data; // ASP.NET returns { success: true, data: {...} }
   },
 
-  // 2. Mock submission to the Agent (would be connected to Agent API)
+  // 2. Real submission to the ASP.NET Core Agent Controller
   submitScenarioAnalysis: async (prompt: string) => {
-    // In a real implementation this hits the Node.js agent proxy in backend
-    return new Promise((resolve) => {
-      setTimeout(() => resolve({ 
-        success: true, 
-        message: "Analysis complete",
-        report: {
-          recommendedBudget: "$120M - $150M",
-          historicalBenchmark: "$135M",
-          vfxIntensity: "High",
-          comparableCount: 24,
-          recommendation: "Greenlight with caution. Sci-Fi High-VFX has high historical variance in ROI."
-        }
-      }), 2000);
+    const res = await fetch(`${API_BASE}/agent/chat`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message: prompt })
     });
+    if (!res.ok) throw new Error('Agent analysis failed');
+    return await res.json();
+  },
+
+  // 3. Real health check for ASP.NET API
+  checkHealth: async (): Promise<boolean> => {
+    try {
+      const res = await fetch(`${API_BASE}/health`);
+      return res.ok;
+    } catch {
+      return false;
+    }
   }
 };

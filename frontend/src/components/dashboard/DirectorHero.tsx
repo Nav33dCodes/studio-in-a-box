@@ -3,21 +3,26 @@ import { Play, Sparkles, TerminalSquare } from 'lucide-react';
 import { api } from '../../services/api';
 
 interface Props {
-  onAnalysisComplete: (report: any) => void;
+  onAnalysisStart: () => void;
+  onAnalysisComplete: (report: string) => void;
   onOpenTrace: () => void;
 }
 
-export default function DirectorHero({ onAnalysisComplete, onOpenTrace }: Props) {
+export default function DirectorHero({ onAnalysisStart, onAnalysisComplete, onOpenTrace }: Props) {
   const [prompt, setPrompt] = useState('Analyze a $50M high-VFX Sci-Fi project');
   const [isAnalyzing, setIsAnalyzing] = useState(false);
 
   const handleRun = async () => {
     setIsAnalyzing(true);
+    onAnalysisStart();
     try {
       const res = await api.submitScenarioAnalysis(prompt);
-      if (res.success) {
-        onAnalysisComplete(res.report);
+      if (res.response) {
+        onAnalysisComplete(res.response); // The real Groq response text
       }
+    } catch (e) {
+      console.error(e);
+      onAnalysisComplete("Error connecting to AI Agent. Is the Node.js service running on port 3001?");
     } finally {
       setIsAnalyzing(false);
     }
