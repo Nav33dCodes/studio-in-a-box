@@ -30,11 +30,16 @@ export default function AppLayout() {
       <aside className="w-[240px] border-r border-border bg-surface flex flex-col shrink-0">
 
         {/* Logo */}
-        <div className="h-14 flex items-center gap-2.5 px-5 border-b border-border">
-          <div className="w-7 h-7 rounded-lg bg-accent-amber/10 flex items-center justify-center">
-            <Clapperboard className="w-4 h-4 text-accent-amber" />
+        <div className="h-16 flex items-center px-6 border-b border-border bg-[#0a0a0a]">
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 rounded bg-background border border-border flex items-center justify-center">
+              <Film className="w-4 h-4 text-primary opacity-80" />
+            </div>
+            <div className="flex flex-col">
+              <span className="text-[14px] font-extrabold text-primary tracking-widest uppercase">STUDIO-IN-A-BOX</span>
+              <span className="text-[9px] font-semibold text-secondary tracking-widest uppercase">PRODUCTION INTELLIGENCE</span>
+            </div>
           </div>
-          <span className="text-[13px] font-bold text-primary tracking-wide">STUDIO-IN-A-BOX</span>
         </div>
 
         {/* Nav */}
@@ -50,10 +55,10 @@ export default function AppLayout() {
                     key={item.to}
                     to={item.to}
                     className={({ isActive }) =>
-                      `group flex items-center gap-2.5 px-2.5 py-[7px] rounded-md text-[13px] transition-all duration-150 ${
+                      `group flex items-center gap-3 px-3 py-2 rounded-md text-[13px] transition-colors duration-150 ${
                         isActive
-                          ? 'bg-surface-raised text-primary font-medium'
-                          : 'text-secondary hover:text-primary hover:bg-surface-raised/60'
+                          ? 'bg-[#151515] text-primary font-medium shadow-[inset_1px_0_0_0_#444]'
+                          : 'text-secondary hover:text-primary hover:bg-[#111]'
                       }`
                     }
                   >
@@ -87,16 +92,16 @@ export default function AppLayout() {
       <main className="flex-1 flex flex-col min-w-0 overflow-hidden">
 
         {/* Top Bar */}
-        <header className="h-12 border-b border-border flex items-center justify-between px-6 shrink-0 bg-surface/50 backdrop-blur-md z-10">
-          <div className="flex items-center gap-2 text-[12px]">
-            <span className="text-muted font-medium tracking-wider uppercase">Production Intelligence</span>
+        <header className="h-14 border-b border-border flex items-center justify-between px-8 shrink-0 bg-background z-10">
+          <div className="flex items-center gap-2.5 text-[12px] font-semibold">
+            <span className="text-secondary tracking-widest uppercase">PRODUCTION INTELLIGENCE</span>
             <span className="text-border-light">/</span>
-            <span className="text-primary font-semibold">{currentPage}</span>
+            <span className="text-primary">{currentPage}</span>
           </div>
-          <div className="flex items-center gap-3">
-            <div className="flex items-center gap-1.5 text-[11px] font-mono text-secondary bg-surface-raised px-2.5 py-1 rounded border border-border">
-              <span className="w-1.5 h-1.5 rounded-full bg-accent-green"></span>
-              3 services connected
+          <div className="flex items-center">
+            <div className="flex items-center gap-2 text-[11px] font-medium text-secondary hover:text-primary transition-colors cursor-default">
+              <span className="w-2 h-2 rounded-full bg-accent-green animate-pulse-dot"></span>
+              5 SYSTEMS OPERATIONAL
             </div>
           </div>
         </header>

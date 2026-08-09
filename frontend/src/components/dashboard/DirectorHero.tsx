@@ -10,9 +10,11 @@ interface Props {
 }
 
 const suggestions = [
-  "Compare ROI of Action vs Comedy",
-  "Budget benchmark for Epic Fantasy",
-  "Highest grossing low-budget Horror",
+  "Budget Benchmark",
+  "High-VFX Analysis",
+  "ROI Analysis",
+  "Genre Comparison",
+  "Historical Production Trends",
 ];
 
 export default function DirectorHero({ onAnalysisStart, onAnalysisComplete }: Props) {
@@ -57,13 +59,10 @@ export default function DirectorHero({ onAnalysisStart, onAnalysisComplete }: Pr
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
           <Sparkles className="w-4 h-4 text-accent-amber" />
-          <h2 className="text-[13px] font-semibold text-primary tracking-wider uppercase">Director Agent</h2>
-          <div className="ml-2 flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-accent-blue/10 border border-accent-blue/20">
-            <span className="relative flex h-1.5 w-1.5">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent-blue opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-accent-blue"></span>
-            </span>
-            <span className="text-[10px] font-mono text-accent-blue">READY</span>
+          <h2 className="text-[13px] font-semibold text-primary tracking-wider uppercase">DIRECTOR AGENT</h2>
+          <div className="ml-2 flex items-center gap-1.5 text-[10px] font-mono text-accent-amber bg-accent-amber/10 border border-accent-amber/20 px-2 py-0.5 rounded-sm">
+            <span className="w-1.5 h-1.5 rounded-full bg-accent-amber"></span>
+            READY
           </div>
         </div>
         
@@ -84,21 +83,21 @@ export default function DirectorHero({ onAnalysisStart, onAnalysisComplete }: Pr
           value={prompt}
           onChange={(e) => setPrompt(e.target.value)}
           onKeyDown={handleKeyDown}
-          className="w-full bg-surface border border-border rounded-lg py-3.5 pl-4 pr-36 text-[15px] text-primary placeholder:text-muted focus:outline-none focus:border-border-light transition-colors font-light"
-          placeholder="Ask the Director Agent anything about production data..."
+          className="w-full bg-background border border-border rounded-sm py-4 pl-4 pr-64 text-[14px] text-primary placeholder:text-muted focus:outline-none focus:border-accent-amber/50 transition-colors font-medium shadow-[inset_0_2px_4px_rgba(0,0,0,0.5)]"
+          placeholder="Describe a production scenario, budget question, genre, VFX requirement, or historical comparison..."
         />
         <div className="absolute right-1.5 top-1.5 bottom-1.5">
           <button 
             onClick={handleRun}
             disabled={isAnalyzing || !prompt.trim()}
-            className="h-full px-5 bg-primary text-background text-[13px] font-semibold rounded-md flex items-center gap-2 hover:bg-primary/90 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+            className="h-full px-6 bg-accent-amber text-background text-[11px] font-bold tracking-wider uppercase rounded-sm flex items-center gap-2 hover:bg-accent-amber/90 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
           >
             {isAnalyzing ? (
               <span className="animate-spin w-3.5 h-3.5 border-2 border-background border-t-transparent rounded-full" />
             ) : (
               <Play className="w-3.5 h-3.5 fill-current" />
             )}
-            {isAnalyzing ? 'Analyzing...' : 'Run Analysis'}
+            {isAnalyzing ? 'ANALYZING...' : 'RUN PRODUCTION ANALYSIS'}
           </button>
         </div>
       </div>
