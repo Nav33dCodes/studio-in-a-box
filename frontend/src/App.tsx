@@ -1,21 +1,23 @@
-import { useEffect, useState } from 'react';
-import Dashboard from './components/Dashboard';
-import ChatWidget from './components/ChatWidget';
+import { Routes, Route, Navigate } from 'react-router-dom';
+import AppLayout from './components/layout/AppLayout';
+import CommandCenter from './pages/CommandCenter';
 
 function App() {
-  const [theme, setTheme] = useState<'light' | 'dark'>('dark');
-
-  useEffect(() => {
-    document.documentElement.setAttribute('data-theme', theme);
-  }, [theme]);
-
-  const toggleTheme = () => setTheme(prev => prev === 'dark' ? 'light' : 'dark');
-
   return (
-    <div className="app-container">
-      <Dashboard theme={theme} toggleTheme={toggleTheme} />
-      <ChatWidget />
-    </div>
+    <Routes>
+      <Route path="/" element={<AppLayout />}>
+        <Route index element={<Navigate to="/command-center" replace />} />
+        <Route path="command-center" element={<CommandCenter />} />
+        
+        {/* Placeholders for future pages */}
+        <Route path="projects" element={<div className="p-8 text-secondary">Projects View (Coming Soon)</div>} />
+        <Route path="scenarios" element={<div className="p-8 text-secondary">Scenarios View (Coming Soon)</div>} />
+        <Route path="analytics" element={<div className="p-8 text-secondary">Analytics View (Coming Soon)</div>} />
+        <Route path="reports" element={<div className="p-8 text-secondary">Reports View (Coming Soon)</div>} />
+        <Route path="agent-activity" element={<div className="p-8 text-secondary">Agent Activity Log (Coming Soon)</div>} />
+        <Route path="data-sources" element={<div className="p-8 text-secondary">Data Sources Config (Coming Soon)</div>} />
+      </Route>
+    </Routes>
   );
 }
 
