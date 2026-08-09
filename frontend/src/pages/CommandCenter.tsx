@@ -1,7 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
 import { api } from '../services/api';
-
-// Placeholder components that we will build out next
 import DirectorHero from '../components/dashboard/DirectorHero';
 import ProductionKPIs from '../components/dashboard/ProductionKPIs';
 import AnalyticsVisualization from '../components/dashboard/AnalyticsVisualization';
@@ -16,59 +14,44 @@ export default function CommandCenter() {
   const [report, setReport] = useState<string | null>(null);
   const [agentStatus, setAgentStatus] = useState<'idle' | 'analyzing' | 'complete'>('idle');
 
-  // Fetch real data from ASP.NET Core API via TanStack Query
-  const { data, isLoading, isError } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ['dashboard-analytics'],
     queryFn: api.getDashboardAnalytics,
   });
 
   return (
-    <div className="max-w-[1600px] mx-auto w-full relative">
-      
-      {/* 1. Director Agent Hero Panel */}
-      <section className="mb-8">
-        <DirectorHero 
-          onAnalysisStart={() => {
-            setAgentStatus('analyzing');
-            setReport(null);
-          }}
-          onAnalysisComplete={(rep) => {
-            setAgentStatus('complete');
-            setReport(rep);
-          }} 
-          onOpenTrace={() => setIsDrawerOpen(true)} 
-        />
-      </section>
+    <div className="max-w-[1440px] mx-auto w-full relative space-y-5">
 
-      {/* Main Grid Layout for the command center */}
-      <div className="grid grid-cols-12 gap-6">
-        
-        {/* Left Column: Analytics (Takes up 8/12 space) */}
-        <div className="col-span-12 xl:col-span-8 flex flex-col gap-6">
-          {/* 2. KPI Cards */}
-          <ProductionKPIs data={data?.kpi} isLoading={isLoading} />
-          
-          {/* 3. Budget vs Box Office Chart */}
+      {/* Director Agent Input */}
+      <DirectorHero
+        onAnalysisStart={() => { setAgentStatus('analyzing'); setReport(null); }}
+        onAnalysisComplete={(rep) => { setAgentStatus('complete'); setReport(rep); }}
+        onOpenTrace={() => setIsDrawerOpen(true)}
+      />
+
+      {/* Separator */}
+      <div className="border-t border-border"></div>
+
+      {/* KPIs */}
+      <ProductionKPIs data={data?.kpi} isLoading={isLoading} />
+
+      {/* Main Grid */}
+      <div className="grid grid-cols-12 gap-5">
+        {/* Left: Chart + Report */}
+        <div className="col-span-12 xl:col-span-8 flex flex-col gap-5">
           <AnalyticsVisualization data={data} isLoading={isLoading} />
-          
-          {/* 6. Generated Report (Only shows when report exists) */}
           {report && <IntelligenceReport report={report} />}
         </div>
 
-        {/* Right Column: System & Agent (Takes up 4/12 space) */}
-        <div className="col-span-12 xl:col-span-4 flex flex-col gap-6">
-          {/* 4. Live Agent Activity */}
+        {/* Right: Activity + Status */}
+        <div className="col-span-12 xl:col-span-4 flex flex-col gap-5">
           <LiveAgentActivity status={agentStatus} />
-          
-          {/* 5. System Status */}
           <SystemStatus />
         </div>
-
       </div>
 
-      {/* 7. Agent Execution Trace Drawer (Slide out from right) */}
+      {/* Drawer */}
       <ExecutionTraceDrawer isOpen={isDrawerOpen} onClose={() => setIsDrawerOpen(false)} />
-
     </div>
   );
 }

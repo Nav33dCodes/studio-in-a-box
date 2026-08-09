@@ -6,7 +6,7 @@ export default function SystemStatus() {
   const { data: isApiHealthy } = useQuery({
     queryKey: ['health'],
     queryFn: api.checkHealth,
-    refetchInterval: 5000 // poll every 5s
+    refetchInterval: 5000
   });
 
   const { isSuccess: isDbOnline } = useQuery({
@@ -16,35 +16,35 @@ export default function SystemStatus() {
   });
 
   const systems = [
-    { name: 'ASP.NET Core Web API', icon: <Code2 className="w-4 h-4" />, status: isApiHealthy ? 'ONLINE' : 'OFFLINE' },
-    { name: 'ClickHouse Cloud Database', icon: <Database className="w-4 h-4" />, status: isDbOnline ? 'ONLINE' : 'OFFLINE' },
-    { name: 'Groq Agent Platform', icon: <BrainCircuit className="w-4 h-4" />, status: isApiHealthy ? 'READY' : 'OFFLINE' },
-    { name: 'ClickHouse MCP Server', icon: <Server className="w-4 h-4" />, status: isApiHealthy ? 'READY' : 'OFFLINE' },
-    { name: 'Google Cloud Infrastructure', icon: <Cloud className="w-4 h-4" />, status: 'ONLINE' },
+    { name: 'ASP.NET Core API', icon: Code2, online: !!isApiHealthy },
+    { name: 'ClickHouse Cloud', icon: Database, online: !!isDbOnline },
+    { name: 'Groq LLM Agent', icon: BrainCircuit, online: !!isApiHealthy },
+    { name: 'ClickHouse MCP', icon: Server, online: !!isApiHealthy },
+    { name: 'Google Cloud', icon: Cloud, online: true },
   ];
 
-  const allNominal = isApiHealthy && isDbOnline;
+  const allOk = systems.every(s => s.online);
 
   return (
-    <div className="border border-border bg-surface rounded-lg flex flex-col flex-1">
-      <div className="p-4 border-b border-border flex items-center justify-between">
-        <h3 className="text-sm font-semibold text-primary tracking-widest uppercase">System Status</h3>
-        <div className={`flex items-center gap-1.5 text-xs font-medium ${allNominal ? 'text-green-500' : 'text-red-500'}`}>
-          <div className={`w-2 h-2 rounded-full ${allNominal ? 'bg-green-500 animate-pulse' : 'bg-red-500'}`}></div>
-          {allNominal ? 'ALL SYSTEMS NOMINAL' : 'SYSTEM ERROR'}
+    <div className="bg-surface border border-border rounded-lg flex flex-col shadow-card animate-fade-in-delay-3">
+      <div className="px-4 py-3 border-b border-border flex items-center justify-between">
+        <h3 className="text-[11px] font-semibold text-primary tracking-[0.12em] uppercase">System Status</h3>
+        <div className={`flex items-center gap-1.5 text-[10px] font-mono ${allOk ? 'text-accent-green' : 'text-accent-red'}`}>
+          <span className={`w-1.5 h-1.5 rounded-full ${allOk ? 'bg-accent-green' : 'bg-accent-red'}`} style={{ animation: 'pulse-dot 2s infinite' }}></span>
+          {allOk ? 'NOMINAL' : 'DEGRADED'}
         </div>
       </div>
       
-      <div className="p-4 flex flex-col gap-4">
+      <div className="p-4 flex flex-col gap-3">
         {systems.map((sys) => (
           <div key={sys.name} className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="text-secondary">{sys.icon}</div>
-              <span className="text-sm text-primary">{sys.name}</span>
+            <div className="flex items-center gap-2.5">
+              <sys.icon className="w-3.5 h-3.5 text-muted" />
+              <span className="text-[12px] text-secondary">{sys.name}</span>
             </div>
-            <div className={`text-xs font-mono uppercase ${sys.status === 'OFFLINE' ? 'text-red-500' : 'text-green-500'}`}>
-              {sys.status}
-            </div>
+            <span className={`text-[10px] font-mono tracking-wider ${sys.online ? 'text-accent-green' : 'text-accent-red'}`}>
+              {sys.online ? 'ONLINE' : 'OFFLINE'}
+            </span>
           </div>
         ))}
       </div>

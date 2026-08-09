@@ -1,4 +1,4 @@
-import { Terminal, CheckCircle2, CircleDashed } from 'lucide-react';
+import { Terminal, CheckCircle2, CircleDashed, Loader2 } from 'lucide-react';
 
 interface Props {
   status: 'idle' | 'analyzing' | 'complete';
@@ -6,50 +6,43 @@ interface Props {
 
 export default function LiveAgentActivity({ status }: Props) {
   const getEvents = () => {
-    if (status === 'idle') return [{ id: 1, text: 'Awaiting instructions...', status: 'pending', time: new Date().toLocaleTimeString() }];
+    if (status === 'idle') return [
+      { text: 'Awaiting instructions...', status: 'pending' as const }
+    ];
     if (status === 'analyzing') return [
-      { id: 1, text: 'Transmitting prompt to Agent...', status: 'complete', time: new Date().toLocaleTimeString() },
-      { id: 2, text: 'Awaiting LLM reasoning & MCP tools...', status: 'pending', time: new Date().toLocaleTimeString() }
+      { text: 'Prompt transmitted to agent', status: 'complete' as const },
+      { text: 'LLM reasoning & MCP tool calls...', status: 'loading' as const },
     ];
     return [
-      { id: 1, text: 'Director Agent activated', status: 'complete', time: new Date().toLocaleTimeString() },
-      { id: 2, text: 'ClickHouse MCP tool requested', status: 'complete', time: new Date().toLocaleTimeString() },
-      { id: 3, text: 'Query executed against database', status: 'complete', time: new Date().toLocaleTimeString() },
-      { id: 4, text: 'Analysis returned to user', status: 'complete', time: new Date().toLocaleTimeString() }
+      { text: 'Director Agent activated', status: 'complete' as const },
+      { text: 'MCP tool: run_select_query', status: 'complete' as const },
+      { text: 'ClickHouse query executed', status: 'complete' as const },
+      { text: 'Analysis returned', status: 'complete' as const },
     ];
   };
 
   const events = getEvents();
 
   return (
-    <div className="border border-border bg-surface rounded-lg flex flex-col h-[300px]">
-      <div className="p-4 border-b border-border flex items-center gap-2">
-        <Terminal className="w-4 h-4 text-secondary" />
-        <h3 className="text-sm font-semibold text-primary tracking-widest uppercase">Agent Activity</h3>
+    <div className="bg-surface border border-border rounded-lg flex flex-col shadow-card animate-fade-in-delay-2">
+      <div className="px-4 py-3 border-b border-border flex items-center gap-2">
+        <Terminal className="w-3.5 h-3.5 text-muted" />
+        <h3 className="text-[11px] font-semibold text-primary tracking-[0.12em] uppercase">Agent Activity</h3>
       </div>
       
-      <div className="flex-1 overflow-y-auto p-4 flex flex-col gap-3 font-mono text-xs">
+      <div className="p-4 flex flex-col gap-2.5 font-mono text-[11px]">
         {events.map((evt, i) => (
-          <div key={evt.id} className="flex gap-3 relative">
-            {/* Timeline line */}
-            {i !== events.length - 1 && (
-              <div className="absolute left-[7px] top-4 bottom-[-12px] w-px bg-border z-0"></div>
+          <div key={i} className="flex items-start gap-2.5">
+            {evt.status === 'complete' ? (
+              <CheckCircle2 className="w-3.5 h-3.5 text-accent-green shrink-0 mt-0.5" />
+            ) : evt.status === 'loading' ? (
+              <Loader2 className="w-3.5 h-3.5 text-accent-blue shrink-0 mt-0.5 animate-spin" />
+            ) : (
+              <CircleDashed className="w-3.5 h-3.5 text-muted shrink-0 mt-0.5" />
             )}
-            
-            <div className="relative z-10 bg-surface">
-              {evt.status === 'complete' ? (
-                <CheckCircle2 className="w-4 h-4 text-accent-blue" />
-              ) : (
-                <CircleDashed className="w-4 h-4 text-secondary animate-spin-slow" />
-              )}
-            </div>
-            
-            <div className="flex flex-col gap-0.5 mt-0.5">
-              <span className={evt.status === 'complete' ? 'text-primary' : 'text-secondary'}>
-                {evt.text}
-              </span>
-              <span className="text-secondary/50">{evt.time}</span>
-            </div>
+            <span className={evt.status === 'pending' ? 'text-muted' : 'text-secondary'}>
+              {evt.text}
+            </span>
           </div>
         ))}
       </div>

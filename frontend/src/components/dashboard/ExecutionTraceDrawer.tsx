@@ -1,4 +1,4 @@
-import { X, Code, Database, ChevronRight } from 'lucide-react';
+import { X, Code, Database, ChevronDown } from 'lucide-react';
 
 interface Props {
   isOpen: boolean;
@@ -10,66 +10,55 @@ export default function ExecutionTraceDrawer({ isOpen, onClose }: Props) {
 
   return (
     <>
-      {/* Backdrop */}
-      <div 
-        className="fixed inset-0 bg-background/80 backdrop-blur-sm z-40 transition-opacity"
-        onClick={onClose}
-      />
+      <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40" onClick={onClose} />
       
-      {/* Drawer Panel */}
-      <div className="fixed inset-y-0 right-0 w-[500px] bg-surface border-l border-border z-50 shadow-2xl flex flex-col animate-in slide-in-from-right duration-300">
-        
-        <div className="h-16 border-b border-border flex items-center justify-between px-6 shrink-0">
-          <h2 className="text-sm font-semibold tracking-widest text-primary uppercase">Execution Trace</h2>
-          <button onClick={onClose} className="text-secondary hover:text-primary transition-colors">
-            <X className="w-5 h-5" />
+      <div className="fixed inset-y-0 right-0 w-[480px] bg-surface border-l border-border z-50 flex flex-col">
+        <div className="h-12 border-b border-border flex items-center justify-between px-5 shrink-0">
+          <h2 className="text-[12px] font-semibold tracking-[0.12em] text-primary uppercase">Execution Trace</h2>
+          <button onClick={onClose} className="text-muted hover:text-primary transition-colors">
+            <X className="w-4 h-4" />
           </button>
         </div>
 
-        <div className="flex-1 overflow-y-auto p-6 space-y-6">
-          <div className="text-xs text-secondary">
-            Displaying safe, user-facing execution metadata for the recent analysis.
-          </div>
+        <div className="flex-1 overflow-y-auto p-5 space-y-4">
+          <p className="text-[11px] text-muted">MCP tool invocation metadata from the most recent analysis.</p>
 
-          <TraceStep 
-            icon={<Code className="w-4 h-4" />}
-            title="TOOL INVOCATION"
-            subtitle="mcp.clickhouse.run_query"
-            code={`{\n  "query": "SELECT avg(production_budget), avg(box_office) FROM movies WHERE genre='Sci-Fi' AND vfx_intensity='High'"\n}`}
+          <TraceBlock 
+            icon={<Code className="w-3.5 h-3.5" />}
+            title="TOOL CALL"
+            subtitle="mcp.clickhouse.run_select_query"
+            code={`{\n  "query": "SELECT avg(production_budget),\n           avg(box_office)\n    FROM movies\n    WHERE genre = 'Sci-Fi'\n      AND vfx_intensity = 'High'"\n}`}
           />
 
-          <div className="flex justify-center -my-2 text-border">
-            <ChevronRight className="w-4 h-4 rotate-90" />
+          <div className="flex justify-center text-border">
+            <ChevronDown className="w-4 h-4" />
           </div>
 
-          <TraceStep 
-            icon={<Database className="w-4 h-4" />}
+          <TraceBlock 
+            icon={<Database className="w-3.5 h-3.5" />}
             title="TOOL RESULT"
-            subtitle="2 rows retrieved in 14ms"
+            subtitle="2 rows · 14ms"
             code={`[\n  {\n    "avg(production_budget)": 135000000,\n    "avg(box_office)": 380000000\n  }\n]`}
-            isSuccess
+            isResult
           />
-
         </div>
       </div>
     </>
   );
 }
 
-function TraceStep({ icon, title, subtitle, code, isSuccess = false }: { icon: React.ReactNode, title: string, subtitle: string, code: string, isSuccess?: boolean }) {
+function TraceBlock({ icon, title, subtitle, code, isResult }: { icon: React.ReactNode, title: string, subtitle: string, code: string, isResult?: boolean }) {
   return (
-    <div className="border border-border rounded-lg bg-background overflow-hidden">
-      <div className={`p-3 border-b border-border flex items-center justify-between ${isSuccess ? 'bg-accent-blue/5' : 'bg-surface-raised'}`}>
+    <div className="border border-border rounded-lg overflow-hidden">
+      <div className={`px-3.5 py-2.5 border-b border-border flex items-center justify-between ${isResult ? 'bg-accent-blue/5' : 'bg-surface-raised'}`}>
         <div className="flex items-center gap-2">
-          <div className={isSuccess ? 'text-accent-blue' : 'text-secondary'}>
-            {icon}
-          </div>
-          <span className="text-xs font-semibold text-primary">{title}</span>
+          <div className={isResult ? 'text-accent-blue' : 'text-muted'}>{icon}</div>
+          <span className="text-[11px] font-semibold text-primary tracking-wider">{title}</span>
         </div>
-        <span className="text-xs font-mono text-secondary">{subtitle}</span>
+        <span className="text-[10px] font-mono text-muted">{subtitle}</span>
       </div>
-      <div className="p-4 overflow-x-auto bg-[#0a0a0a]">
-        <pre className="text-xs font-mono text-secondary">
+      <div className="p-3.5 bg-background">
+        <pre className="text-[11px] font-mono text-secondary leading-relaxed whitespace-pre-wrap">
           <code>{code}</code>
         </pre>
       </div>

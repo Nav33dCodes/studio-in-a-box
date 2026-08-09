@@ -2,63 +2,40 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer base {
-  :root {
-    --background: 0 0% 4%;
-    --foreground: 0 0% 100%;
-    
-    --card: 0 0% 7%;
-    --card-foreground: 0 0% 100%;
-    
-    --popover: 0 0% 7%;
-    --popover-foreground: 0 0% 100%;
-    
-    --primary: 38 92% 55%; /* Amber accent */
-    --primary-foreground: 0 0% 0%;
-    
-    --secondary: 0 0% 15%;
-    --secondary-foreground: 0 0% 98%;
-    
-    --muted: 0 0% 15%;
-    --muted-foreground: 0 0% 64%;
-    
-    --accent: 0 0% 15%;
-    --accent-foreground: 0 0% 98%;
-    
-    --destructive: 0 84% 60%;
-    --destructive-foreground: 0 0% 98%;
-
-    --border: 0 0% 15%;
-    --input: 0 0% 15%;
-    --ring: 38 92% 55%;
-    
-    --radius: 0.5rem;
-  }
-}
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap');
 
 @layer base {
   * {
-    @apply border-border;
+    border-color: #1a1a1a;
   }
   body {
-    @apply bg-background text-primary font-sans antialiased;
-    background-color: theme('colors.background');
-    color: theme('colors.primary');
+    background-color: #060606;
+    color: #e5e5e5;
+    font-family: 'Inter', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 }
 
-/* Custom scrollbar for deep dark theme */
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-::-webkit-scrollbar-track {
-  background: transparent;
-}
-::-webkit-scrollbar-thumb {
-  background: #333;
-  border-radius: 4px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: #555;
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #222; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #444; }
+
+/* Animations */
+@keyframes fade-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes pulse-dot { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+@keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
+
+.animate-fade-in { animation: fade-in 0.4s ease-out both; }
+.animate-fade-in-delay { animation: fade-in 0.4s ease-out 0.1s both; }
+.animate-fade-in-delay-2 { animation: fade-in 0.4s ease-out 0.2s both; }
+.animate-fade-in-delay-3 { animation: fade-in 0.4s ease-out 0.3s both; }
+
+.skeleton {
+  background: linear-gradient(90deg, #111 25%, #1a1a1a 50%, #111 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
 }
