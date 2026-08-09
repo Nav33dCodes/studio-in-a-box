@@ -5,13 +5,12 @@ import ProductionKPIs from '../components/dashboard/ProductionKPIs';
 import AnalyticsVisualization from '../components/dashboard/AnalyticsVisualization';
 import LiveAgentActivity from '../components/dashboard/LiveAgentActivity';
 import SystemStatus from '../components/dashboard/SystemStatus';
-import IntelligenceReport from '../components/dashboard/IntelligenceReport';
-import ExecutionTraceDrawer from '../components/dashboard/ExecutionTraceDrawer';
+import AnalysisPanel from '../components/dashboard/AnalysisPanel';
 import { useState } from 'react';
 
 export default function CommandCenter() {
-  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [report, setReport] = useState<string | null>(null);
+  const [lastPrompt, setLastPrompt] = useState('');
   const [agentStatus, setAgentStatus] = useState<'idle' | 'analyzing' | 'complete'>('idle');
 
   const { data, isLoading } = useQuery({
@@ -24,9 +23,8 @@ export default function CommandCenter() {
 
       {/* Director Agent Input */}
       <DirectorHero
-        onAnalysisStart={() => { setAgentStatus('analyzing'); setReport(null); }}
+        onAnalysisStart={(prompt) => { setAgentStatus('analyzing'); setReport(null); setLastPrompt(prompt); }}
         onAnalysisComplete={(rep) => { setAgentStatus('complete'); setReport(rep); }}
-        onOpenTrace={() => setIsDrawerOpen(true)}
       />
 
       {/* Separator */}
@@ -35,12 +33,16 @@ export default function CommandCenter() {
       {/* KPIs */}
       <ProductionKPIs data={data?.kpi} isLoading={isLoading} />
 
+      {/* Analysis Results Panel (appears after running analysis) */}
+      {report && (
+        <AnalysisPanel report={report} prompt={lastPrompt} />
+      )}
+
       {/* Main Grid */}
       <div className="grid grid-cols-12 gap-5">
-        {/* Left: Chart + Report */}
-        <div className="col-span-12 xl:col-span-8 flex flex-col gap-5">
+        {/* Left: Chart */}
+        <div className="col-span-12 xl:col-span-8">
           <AnalyticsVisualization data={data} isLoading={isLoading} />
-          {report && <IntelligenceReport report={report} />}
         </div>
 
         {/* Right: Activity + Status */}
@@ -49,9 +51,6 @@ export default function CommandCenter() {
           <SystemStatus />
         </div>
       </div>
-
-      {/* Drawer */}
-      <ExecutionTraceDrawer isOpen={isDrawerOpen} onClose={() => setIsDrawerOpen(false)} />
     </div>
   );
 }

@@ -1,12 +1,11 @@
 import { useState } from 'react';
-import { Play, Sparkles, TerminalSquare, ArrowRight } from 'lucide-react';
+import { Play, Sparkles, ArrowRight } from 'lucide-react';
 import { toast } from 'sonner';
 import { api } from '../../services/api';
 
 interface Props {
-  onAnalysisStart: () => void;
+  onAnalysisStart: (prompt: string) => void;
   onAnalysisComplete: (report: string) => void;
-  onOpenTrace: () => void;
 }
 
 const suggestions = [
@@ -15,14 +14,14 @@ const suggestions = [
   "Highest grossing low-budget Horror",
 ];
 
-export default function DirectorHero({ onAnalysisStart, onAnalysisComplete, onOpenTrace }: Props) {
+export default function DirectorHero({ onAnalysisStart, onAnalysisComplete }: Props) {
   const [prompt, setPrompt] = useState('');
   const [isAnalyzing, setIsAnalyzing] = useState(false);
 
   const handleRun = async () => {
     if (!prompt.trim()) return;
     setIsAnalyzing(true);
-    onAnalysisStart();
+    onAnalysisStart(prompt);
     toast.info('Agent activated', { description: 'Routing prompt to Groq LLM via MCP...' });
     try {
       const res = await api.submitScenarioAnalysis(prompt);
@@ -58,19 +57,12 @@ export default function DirectorHero({ onAnalysisStart, onAnalysisComplete, onOp
             <span className="text-[10px] font-mono text-accent-blue">READY</span>
           </div>
         </div>
-        <button 
-          onClick={onOpenTrace}
-          className="flex items-center gap-1.5 text-[11px] text-secondary hover:text-primary transition-colors"
-        >
-          <TerminalSquare className="w-3.5 h-3.5" />
-          Execution Trace
-        </button>
       </div>
 
       {/* Input */}
       <div className="relative mb-3">
-        <input 
-          type="text" 
+        <input
+          type="text"
           value={prompt}
           onChange={(e) => setPrompt(e.target.value)}
           onKeyDown={handleKeyDown}
@@ -78,7 +70,7 @@ export default function DirectorHero({ onAnalysisStart, onAnalysisComplete, onOp
           placeholder="Ask the Director Agent anything about production data..."
         />
         <div className="absolute right-1.5 top-1.5 bottom-1.5">
-          <button 
+          <button
             onClick={handleRun}
             disabled={isAnalyzing || !prompt.trim()}
             className="h-full px-5 bg-primary text-background text-[13px] font-semibold rounded-md flex items-center gap-2 hover:bg-primary/90 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
