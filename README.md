@@ -4,7 +4,7 @@
 > Built with Groq, ASP.NET Core, React & ClickHouse Cloud
 
 ![React](https://img.shields.io/badge/React-18.2-61DAFB?style=flat-square&logo=react)
-![.NET](https://img.shields.io/badge/.NET_8-512BD4?style=flat-square&logo=dotnet)
+![.NET](https://img.shields.io/badge/.NET_10-512BD4?style=flat-square&logo=dotnet)
 ![ClickHouse](https://img.shields.io/badge/ClickHouse_Cloud-FFDD24?style=flat-square&logo=clickhouse&logoColor=black)
 ![Node.js](https://img.shields.io/badge/Node.js-20-339933?style=flat-square&logo=nodedotjs)
 ![Groq](https://img.shields.io/badge/Groq-Llama_3.3_70B-F55036?style=flat-square)
@@ -69,7 +69,7 @@ graph TD
     end
 
     subgraph "API Gateway — Port 5000"
-        B[ASP.NET Core 8<br/>Controllers, SignalR Hub]
+        B[ASP.NET Core 10<br/>Controllers, SignalR Hub]
         B2[LiveBoxOfficeSimulator<br/>BackgroundService]
     end
 
@@ -352,7 +352,7 @@ The backend executes the following ClickHouse queries:
 | Tool | Version | Purpose |
 |---|---|---|
 | Node.js | v18+ | Runs the AI Agent and Frontend |
-| .NET SDK | 8.0+ | Runs the ASP.NET Core Backend |
+| .NET SDK | 10.0+ | Runs the ASP.NET Core Backend |
 | npm | v9+ | Package management |
 
 ### Step-by-step Setup
