@@ -1,11 +1,12 @@
 import { useState } from 'react';
-import { Play, Sparkles, ArrowRight } from 'lucide-react';
+import { Play, Sparkles, ArrowRight, FileText } from 'lucide-react';
 import { toast } from 'sonner';
 import { api } from '../../services/api';
+import { openEnterpriseReport } from '../../lib/report-viewer';
 
 interface Props {
   onAnalysisStart: (prompt: string) => void;
-  onAnalysisComplete: (report: string) => void;
+  onAnalysisComplete: () => void;
 }
 
 const suggestions = [
@@ -17,6 +18,7 @@ const suggestions = [
 export default function DirectorHero({ onAnalysisStart, onAnalysisComplete }: Props) {
   const [prompt, setPrompt] = useState('');
   const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const [lastReport, setLastReport] = useState<{report: string, prompt: string} | null>(null);
 
   const handleRun = async () => {
     if (!prompt.trim()) return;
@@ -26,13 +28,15 @@ export default function DirectorHero({ onAnalysisStart, onAnalysisComplete }: Pr
     try {
       const res = await api.submitScenarioAnalysis(prompt);
       if (res.response) {
-        onAnalysisComplete(res.response);
-        toast.success('Analysis complete');
+        onAnalysisComplete();
+        setLastReport({ report: res.response, prompt });
+        toast.success('Analysis complete! Opening report...');
+        openEnterpriseReport(res.response, prompt);
       }
     } catch (e) {
       console.error(e);
-      onAnalysisComplete("Error: Could not reach the AI Agent. Ensure the Node.js service is running on port 3001.");
-      toast.error('Connection failed');
+      onAnalysisComplete();
+      toast.error('Connection failed', { description: 'Could not reach the AI Agent.' });
     } finally {
       setIsAnalyzing(false);
     }
@@ -44,7 +48,6 @@ export default function DirectorHero({ onAnalysisStart, onAnalysisComplete }: Pr
 
   return (
     <div className="animate-fade-in">
-      {/* Title row */}
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
           <Sparkles className="w-4 h-4 text-accent-amber" />
@@ -57,12 +60,21 @@ export default function DirectorHero({ onAnalysisStart, onAnalysisComplete }: Pr
             <span className="text-[10px] font-mono text-accent-blue">READY</span>
           </div>
         </div>
+        
+        {lastReport && (
+          <button 
+            onClick={() => openEnterpriseReport(lastReport.report, lastReport.prompt)}
+            className="flex items-center gap-1.5 text-[11px] text-accent-blue hover:text-white transition-colors"
+          >
+            <FileText className="w-3.5 h-3.5" />
+            View Last Report
+          </button>
+        )}
       </div>
 
-      {/* Input */}
       <div className="relative mb-3">
-        <input
-          type="text"
+        <input 
+          type="text" 
           value={prompt}
           onChange={(e) => setPrompt(e.target.value)}
           onKeyDown={handleKeyDown}
@@ -70,7 +82,7 @@ export default function DirectorHero({ onAnalysisStart, onAnalysisComplete }: Pr
           placeholder="Ask the Director Agent anything about production data..."
         />
         <div className="absolute right-1.5 top-1.5 bottom-1.5">
-          <button
+          <button 
             onClick={handleRun}
             disabled={isAnalyzing || !prompt.trim()}
             className="h-full px-5 bg-primary text-background text-[13px] font-semibold rounded-md flex items-center gap-2 hover:bg-primary/90 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
@@ -85,7 +97,6 @@ export default function DirectorHero({ onAnalysisStart, onAnalysisComplete }: Pr
         </div>
       </div>
 
-      {/* Suggestions */}
       <div className="flex items-center gap-2 flex-wrap">
         <span className="text-[11px] text-muted">Try:</span>
         {suggestions.map(s => (

@@ -4,6 +4,7 @@ import AppLayout from './components/layout/AppLayout';
 import CommandCenter from './pages/CommandCenter';
 import ProjectsView from './pages/ProjectsView';
 import DataSourcesView from './pages/DataSourcesView';
+import AgentActivityView from './pages/AgentActivityView';
 import { ScenariosView, AnalyticsView, ReportsView } from './pages/PlaceholderViews';
 
 function App() {
@@ -19,7 +20,7 @@ function App() {
         <Route path="scenarios" element={<ScenariosView />} />
         <Route path="analytics" element={<AnalyticsView />} />
         <Route path="reports" element={<ReportsView />} />
-        <Route path="agent-activity" element={<div className="p-8 text-secondary">Agent Activity Log (Coming Soon)</div>} />
+        <Route path="agent-activity" element={<AgentActivityView />} />
         <Route path="data-sources" element={<DataSourcesView />} />
       </Route>
     </Routes>
