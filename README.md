@@ -47,14 +47,14 @@ Studio-in-a-Box solves this by combining three powerful capabilities into a sing
 
 | Feature | Description |
 |---|---|
+| **Enterprise Command Center** | Polished, Bloomberg-style dark mode UI designed for high-density production intelligence |
+| **Operational Execution Trace** | Live, Datadog-style timeline showing LLM reasoning, MCP protocol calls, and ClickHouse latency |
+| **Intelligence Reports** | Auto-generating, print-ready "Whitepaper" tabs for detailed strategic analysis |
 | **AI Director Agent** | Conversational AI that autonomously writes and executes ClickHouse SQL via MCP tool calling |
-| **Interactive Charts** | SVG-based bar charts and area charts with hover tooltips (Recharts) |
+| **Interactive Charts** | SVG-based analytics visualization (Recharts) with deep cinematic styling |
 | **Enterprise Data Grid** | Sortable, filterable data table powered by TanStack React Table |
 | **Live Telemetry** | SignalR WebSocket connection streams simulated global box office sales to the dashboard in real time |
-| **OLED Dark Mode** | Clean, minimalist design with a physical Light/Dark theme toggle |
-| **Genre Filtering** | Dropdown controls to filter movies by Genre (Sci-Fi, Action, Drama, Comedy, Horror) and VFX Intensity (Low, Medium, High) |
-| **KPI Dashboard** | Aggregated metrics: Total Box Office, Total Budgets, Global ROI, and Movie Count |
-| **Scene Benchmarks** | Median and maximum scene production costs broken down by VFX intensity |
+| **Production KPIs** | Aggregated metrics: Total Box Office, Total Budgets, Global ROI, and Movie Count |
 
 ---
 
