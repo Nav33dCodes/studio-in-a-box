@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Play, Sparkles, TerminalSquare } from 'lucide-react';
+import { toast } from 'sonner';
 import { api } from '../../services/api';
 
 interface Props {
@@ -15,14 +16,17 @@ export default function DirectorHero({ onAnalysisStart, onAnalysisComplete, onOp
   const handleRun = async () => {
     setIsAnalyzing(true);
     onAnalysisStart();
+    toast.info('Agent Activated', { description: 'Transmitting secure prompt to Groq LLM...' });
     try {
       const res = await api.submitScenarioAnalysis(prompt);
       if (res.response) {
         onAnalysisComplete(res.response); // The real Groq response text
+        toast.success('Analysis Complete', { description: 'Intelligence report has been generated.' });
       }
     } catch (e) {
       console.error(e);
       onAnalysisComplete("Error connecting to AI Agent. Is the Node.js service running on port 3001?");
+      toast.error('Agent Connection Failed', { description: 'Please ensure Node.js is running on port 3001.' });
     } finally {
       setIsAnalyzing(false);
     }

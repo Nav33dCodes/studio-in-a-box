@@ -1,10 +1,12 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
+import { Toaster } from 'sonner';
 import AppLayout from './components/layout/AppLayout';
 import CommandCenter from './pages/CommandCenter';
 
 function App() {
   return (
-    <Routes>
+    <>
+      <Routes>
       <Route path="/" element={<AppLayout />}>
         <Route index element={<Navigate to="/command-center" replace />} />
         <Route path="command-center" element={<CommandCenter />} />
@@ -18,6 +20,8 @@ function App() {
         <Route path="data-sources" element={<div className="p-8 text-secondary">Data Sources Config (Coming Soon)</div>} />
       </Route>
     </Routes>
+    <Toaster theme="dark" position="bottom-right" toastOptions={{ style: { background: '#111', border: '1px solid #222', color: '#fff' } }} />
+    </>
   );
 }
 
