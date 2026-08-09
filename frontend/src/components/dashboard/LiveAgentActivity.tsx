@@ -1,14 +1,25 @@
 import { Terminal, CheckCircle2, CircleDashed } from 'lucide-react';
 
-export default function LiveAgentActivity() {
-  const events = [
-    { id: 1, text: 'Director Agent activated', status: 'complete', time: '10:42:01' },
-    { id: 2, text: 'ClickHouse MCP selected', status: 'complete', time: '10:42:02' },
-    { id: 3, text: 'Query executed', status: 'complete', time: '10:42:02' },
-    { id: 4, text: 'Records retrieved', status: 'complete', time: '10:42:03' },
-    { id: 5, text: 'Analysis completed', status: 'complete', time: '10:42:05' },
-    { id: 6, text: 'Awaiting next instruction', status: 'pending', time: '10:42:05' },
-  ];
+interface Props {
+  status: 'idle' | 'analyzing' | 'complete';
+}
+
+export default function LiveAgentActivity({ status }: Props) {
+  const getEvents = () => {
+    if (status === 'idle') return [{ id: 1, text: 'Awaiting instructions...', status: 'pending', time: new Date().toLocaleTimeString() }];
+    if (status === 'analyzing') return [
+      { id: 1, text: 'Transmitting prompt to Agent...', status: 'complete', time: new Date().toLocaleTimeString() },
+      { id: 2, text: 'Awaiting LLM reasoning & MCP tools...', status: 'pending', time: new Date().toLocaleTimeString() }
+    ];
+    return [
+      { id: 1, text: 'Director Agent activated', status: 'complete', time: new Date().toLocaleTimeString() },
+      { id: 2, text: 'ClickHouse MCP tool requested', status: 'complete', time: new Date().toLocaleTimeString() },
+      { id: 3, text: 'Query executed against database', status: 'complete', time: new Date().toLocaleTimeString() },
+      { id: 4, text: 'Analysis returned to user', status: 'complete', time: new Date().toLocaleTimeString() }
+    ];
+  };
+
+  const events = getEvents();
 
   return (
     <div className="border border-border bg-surface rounded-lg flex flex-col h-[300px]">

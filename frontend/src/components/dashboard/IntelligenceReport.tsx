@@ -1,13 +1,7 @@
 import { FileText, Download, Check } from 'lucide-react';
 
 interface Props {
-  report: {
-    recommendedBudget: string;
-    historicalBenchmark: string;
-    vfxIntensity: string;
-    comparableCount: number;
-    recommendation: string;
-  }
+  report: string;
 }
 
 export default function IntelligenceReport({ report }: Props) {
@@ -25,32 +19,13 @@ export default function IntelligenceReport({ report }: Props) {
       </div>
       
       <div className="p-6">
-        <div className="grid grid-cols-4 gap-6 mb-8">
-          <div>
-            <div className="text-xs text-secondary uppercase tracking-wider mb-1">Recommended Budget</div>
-            <div className="text-xl font-mono text-primary">{report.recommendedBudget}</div>
-          </div>
-          <div>
-            <div className="text-xs text-secondary uppercase tracking-wider mb-1">Historical Benchmark</div>
-            <div className="text-xl font-mono text-primary">{report.historicalBenchmark}</div>
-          </div>
-          <div>
-            <div className="text-xs text-secondary uppercase tracking-wider mb-1">VFX Intensity</div>
-            <div className="text-xl font-mono text-primary">{report.vfxIntensity}</div>
-          </div>
-          <div>
-            <div className="text-xs text-secondary uppercase tracking-wider mb-1">Comparables Analyzed</div>
-            <div className="text-xl font-mono text-primary">{report.comparableCount}</div>
-          </div>
-        </div>
-
         <div className="bg-background border border-border rounded-md p-4 flex gap-3 items-start">
-          <div className="mt-0.5 bg-accent-amber/20 rounded-full p-1 border border-accent-amber/30">
+          <div className="mt-0.5 bg-accent-amber/20 rounded-full p-1 border border-accent-amber/30 shrink-0">
             <Check className="w-4 h-4 text-accent-amber" />
           </div>
           <div>
-            <h4 className="text-sm font-semibold text-primary mb-1">Director's Recommendation</h4>
-            <p className="text-sm text-secondary leading-relaxed">{report.recommendation}</p>
+            <h4 className="text-sm font-semibold text-primary mb-2">Director's Analysis</h4>
+            <div className="text-sm text-secondary leading-relaxed whitespace-pre-wrap">{report}</div>
           </div>
         </div>
       </div>
