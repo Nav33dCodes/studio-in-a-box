@@ -30,6 +30,12 @@ export default function DirectorHero({ onAnalysisStart, onAnalysisComplete }: Pr
       if (res.response) {
         onAnalysisComplete();
         setLastReport({ report: res.response, prompt });
+        
+        // Save to LocalStorage for the Agent Activity Log
+        const history = JSON.parse(localStorage.getItem('agent_history') || '[]');
+        history.unshift({ prompt, timestamp: new Date().toISOString(), status: 'success' });
+        localStorage.setItem('agent_history', JSON.stringify(history.slice(0, 10))); // Keep last 10
+
         toast.success('Analysis complete! Opening report...');
         openEnterpriseReport(res.response, prompt);
       }
